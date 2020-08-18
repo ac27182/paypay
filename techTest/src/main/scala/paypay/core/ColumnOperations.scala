@@ -5,6 +5,8 @@ import org.apache.spark.sql.functions._
 
 object ColumnOperations {
 
+  // basic column operations
+
   def genIp: Column =
     split(col("client:port"), ":").getItem(0)
 
@@ -12,8 +14,7 @@ object ColumnOperations {
     split(requestColumn, " ").getItem(1)
 
   private[this] def predicate: (Int, Column, Column) => Column =
-    (e, time, timestampOffsetColumn) =>
-      (unix_timestamp(time) - unix_timestamp(timestampOffsetColumn)) > lit(e)
+    (e, time, timestampOffsetColumn) => (unix_timestamp(time) - unix_timestamp(timestampOffsetColumn)) > lit(e)
 
   def genSessionStart(epsilon: Int): Column =
     when(

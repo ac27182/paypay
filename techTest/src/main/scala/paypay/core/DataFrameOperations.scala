@@ -7,6 +7,8 @@ import DataFrameOperationsOps._
 
 object DataFrameOperations {
 
+  // simple data frame operations
+
   def selectSessionizedLogsColumns(dataFrame: DataFrame): DataFrame =
     dataFrame
       .select(
@@ -60,8 +62,12 @@ object DataFrameOperations {
         ColumnOperations.genPercentile
       )
 
+  // composite dataframe operations 
+
   def sessionizeLogs(accessLogsDf: DataFrame): DataFrame =
-    accessLogsDf.withIp.withTimestampOffset.withUrl
+    accessLogsDf
+      .withIp
+      .withTimestampOffset.withUrl
       .withSessionStart(60 * 10) // 10 minute session window
       .withSessionId
       .selectSessionizedLogsColumns

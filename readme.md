@@ -8,7 +8,7 @@
 
 - Derive the `average session time`
 
-- find the `top 10 percent` of users by total session time
+- find the `top 5 percent` of users by total session time
 
 # local setup
 
