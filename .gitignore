@@ -1,0 +1,10 @@
+.bloop
+.metals
+project/project
+project/target
+project/metals.sbt
+target
+
+data/output/
+data/answers/
+answers.tar.gz
