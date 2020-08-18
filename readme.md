@@ -39,11 +39,16 @@ $ spark/bin/spark-submit --class paypay.Main /paypay/techTest/target/scala-2.12/
 # exit the spark container
 $ exit
 
+# show the output files in the terminal
+$ tree -L 2 data/
+
 # run cleanup
 $ sbt clean
 
 # remove spark image image
 $ docker rmi -f bde2020/spark-master:2.4.5-hadoop2.7
+
+
 ```
 
 - **nb:** output files will be be written to `paypay/data/ouput/*`
