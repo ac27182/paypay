@@ -3,6 +3,7 @@ package paypay
 import paypay.domain._
 import paypay.core.PayPayUDF
 import org.apache.spark.SparkConf
+import org.apache.spark.storage.StorageLevel
 import org.apache.spark.sql._
 import org.apache.spark.sql.SQLContext
 import org.apache.spark.sql.functions._
@@ -10,16 +11,18 @@ import org.apache.spark.sql.types._
 import org.apache.spark.sql.expressions._
 import org.apache.spark.sql.catalyst.expressions._
 import java.util.UUID
-import paypay.core.DataFrameOperationsOps._
 import org.apache.log4j.Logger
 import org.apache.log4j.Level
+
+import paypay.core.implicits._
 
 object Main {
 
   private[this] def readAccessLogs(
       path: String
   )(implicit spark: SparkSession): DataFrame =
-    spark.read
+    spark
+      .read
       .format("csv")
       .option("delimiter", " ")
       .option("quote", "\"")
@@ -34,7 +37,8 @@ object Main {
       .set("spark.executor.memory", "4g")
 
   private[this] implicit val spark: SparkSession =
-    SparkSession.builder
+    SparkSession
+      .builder
       .config(sparkConf)
       .getOrCreate
 
@@ -61,8 +65,8 @@ object Main {
       // reduces the aggregate logs into to top 5 percent of ip's ranked by session time
       val activeIpsDf: DataFrame = aggregates.generateActiveIpAggregates
 
-      // cache the aggregates for fast computation
-      aggregates.cache
+      // persist the aggregates in memory
+      aggregates.persist(StorageLevel.MEMORY_ONLY)
 
       // write the respective dataframes to disk
 
@@ -82,6 +86,9 @@ object Main {
         .coalesce(1)
         .write
         .json(s"$linuxBasePath/output/report")
+
+      // un persist the aggregates out of habbit
+      aggregates.unpersist
 
     } finally {
       spark.stop

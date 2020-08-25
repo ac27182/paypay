@@ -3,13 +3,15 @@ parallelExecution in ThisBuild := false
 
 lazy val coreDependencies =
   Seq(
-    "org.apache.spark" %% "spark-sql" % "2.4.5",
-    "org.apache.spark" %% "spark-core" % "2.4.5"
+    "org.apache.spark" %% "spark-sql"   % "2.4.5",
+    "org.apache.spark" %% "spark-core"  % "2.4.5",
+    "org.typelevel"    %% "cats-effect" % "2.1.1",
+    "org.typelevel"    %% "cats-core"   % "2.1.1"
   )
 
 lazy val testDependencies =
   Seq(
-    "org.scalatest" %% "scalatest" % "3.2.1" % Test,
+    "org.scalatest"   %% "scalatest"          % "3.2.1",
     "com.holdenkarau" %% "spark-testing-base" % "2.4.5_0.14.0" % Test
   )
 

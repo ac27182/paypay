@@ -3,7 +3,7 @@ package paypay.core
 import org.apache.spark.sql._
 import org.apache.spark.sql.functions._
 
-import DataFrameOperationsOps._
+import paypay.core.implicits._
 
 object DataFrameOperations {
 
@@ -62,12 +62,13 @@ object DataFrameOperations {
         ColumnOperations.genPercentile
       )
 
-  // composite dataframe operations 
+  // composite dataframe operations
 
   def sessionizeLogs(accessLogsDf: DataFrame): DataFrame =
     accessLogsDf
       .withIp
-      .withTimestampOffset.withUrl
+      .withTimestampOffset
+      .withUrl
       .withSessionStart(60 * 10) // 10 minute session window
       .withSessionId
       .selectSessionizedLogsColumns
@@ -109,56 +110,5 @@ object DataFrameOperations {
         "ip",
         "ip_time_total_s"
       )
-
-}
-
-object DataFrameOperationsOps {
-  final implicit class Ops(dataFrame: DataFrame) {
-
-    def withIp =
-      DataFrameOperations
-        .withIp(dataFrame)
-
-    def selectSessionizedLogsColumns =
-      DataFrameOperations
-        .selectSessionizedLogsColumns(dataFrame)
-
-    def withTimestampOffset =
-      DataFrameOperations
-        .withTimestampOffset(dataFrame)
-
-    def withUrl =
-      DataFrameOperations
-        .withUrl(dataFrame)
-
-    def withSessionStart(epsilon: Int) =
-      DataFrameOperations
-        .withSessionStart(dataFrame, epsilon)
-
-    def withSessionId =
-      DataFrameOperations
-        .withSessionId(dataFrame)
-
-    def withPercentile =
-      DataFrameOperations
-        .withPercentile(dataFrame)
-
-    def sessionizeLogs =
-      DataFrameOperations
-        .sessionizeLogs(dataFrame)
-
-    def generateAggregates =
-      DataFrameOperations
-        .generateAggregates(dataFrame)
-
-    def generateReportAggregates =
-      DataFrameOperations
-        .generateReportAggregates(dataFrame)
-
-    def generateActiveIpAggregates =
-      DataFrameOperations
-        .generateActiveIpAggregates(dataFrame)
-
-  }
 
 }

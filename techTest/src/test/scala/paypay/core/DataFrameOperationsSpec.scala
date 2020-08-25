@@ -1,35 +1,15 @@
 package paypay.core
 
-import org.apache.spark.sql.SparkSession
-import org.scalatest.funspec.AnyFunSpec
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.BeforeAndAfterAll
-import paypay.core.DataFrameOperations._
-import paypay.core.DataFrameOperationsOps._
-import org.apache.spark.SparkConf
-import org.scalatest.wordspec.AnyWordSpec
-import org.apache.log4j.Logger
-import org.apache.log4j.Level
-import org.scalatest.wordspec.AsyncWordSpec
-import scala.concurrent.Future
-import org.apache.spark.SparkContext
-import org.scalatest.compatible.Assertion
-
+import org.scalatest.matchers.should._
+import org.scalatest.funspec._
+import org.scalatest._
+import org.apache.log4j._
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
-import org.apache.spark.sql.Row
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.Column
+import org.apache.spark.sql._
+import org.apache.spark._
 
-trait SparkSessionExtras {
-
-  val sparkConf =
-    new SparkConf()
-      .setMaster("local")
-      .setAppName("spark test")
-      .set("spark.network.timeout", "10000000")
-      .set("spark.sql.shuffle.partitions", "1")
-      .set("spark.executor.memory", "500g")
-}
+import paypay.core.implicits._
 
 class DataFrameOperationsSpec extends AnyFunSpec with Matchers with BeforeAndAfterAll with DataFrameSuiteBase {
 
